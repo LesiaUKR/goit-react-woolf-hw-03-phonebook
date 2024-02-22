@@ -4,13 +4,27 @@ import { Layout, Header, MainHeader } from './Layout.js';
 import { ContactsForm } from 'components/ContactsForm/ContactsForm.jsx';
 import { ContactList } from 'components/ContactList/ContactList.jsx';
 import { Filter } from 'components/Filter/Filter.jsx';
-import initialContacts from '../contacts.json';
+// import initialContacts from '../contacts.json';
 
 export class App extends Component {
   state = {
-    contacts: [...initialContacts],
+    contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    const localContact = localStorage.getItem('contact');
+    if (localContact !== null) {
+      this.setState({ contacts: JSON.parse(localContact) });
+      return;
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contact', JSON.stringify(this.state.contacts));
+    }
+  }
 
   addContact = newContact => {
     this.state.contacts.filter(contact => contact.name === newContact.name)
@@ -39,6 +53,7 @@ export class App extends Component {
   };
 
   render() {
+    const contacts = this.getFilterContacts();
     return (
       <Layout>
         <GlobalStyle />
@@ -46,10 +61,12 @@ export class App extends Component {
         <ContactsForm onSubmit={this.addContact} />
         <Header>Contacts</Header>
         <Filter onChange={this.changeFilter} value={this.state.filter}></Filter>
-        <ContactList
-          contacts={this.getFilterContacts()}
-          onDeleteContact={this.deleteContact}
-        ></ContactList>
+        {contacts.length > 0 && (
+          <ContactList
+            contacts={contacts}
+            onDeleteContact={this.deleteContact}
+          ></ContactList>
+        )}
       </Layout>
     );
   }

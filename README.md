@@ -27,4 +27,4 @@
 
 ### Фінальний результат
 
-![Screencapture](./assets/screencapture.png)
+![Screencapture](./assets/final-result.jpg)
