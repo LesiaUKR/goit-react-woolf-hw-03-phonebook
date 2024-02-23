@@ -4,7 +4,7 @@ import { Layout, Header, MainHeader } from './Layout.js';
 import { ContactsForm } from 'components/ContactsForm/ContactsForm.jsx';
 import { ContactList } from 'components/ContactList/ContactList.jsx';
 import { Filter } from 'components/Filter/Filter.jsx';
-// import initialContacts from '../contacts.json';
+import initialContacts from '../contacts.json';
 
 export class App extends Component {
   state = {
@@ -14,14 +14,15 @@ export class App extends Component {
 
   componentDidMount() {
     const localContact = localStorage.getItem('contact');
-    if (localContact !== null) {
+    if (localContact) {
       this.setState({ contacts: JSON.parse(localContact) });
-      return;
+    } else {
+      this.setState({ contacts: initialContacts });
     }
   }
 
   componentDidUpdate(_, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
       localStorage.setItem('contact', JSON.stringify(this.state.contacts));
     }
   }
