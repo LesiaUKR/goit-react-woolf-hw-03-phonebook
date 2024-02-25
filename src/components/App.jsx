@@ -8,7 +8,7 @@ import initialContacts from '../contacts.json';
 
 export class App extends Component {
   state = {
-    contacts: [],
+    contacts: [...initialContacts],
     filter: '',
   };
 
@@ -16,8 +16,6 @@ export class App extends Component {
     const localContact = localStorage.getItem('contact');
     if (localContact) {
       this.setState({ contacts: JSON.parse(localContact) });
-    } else {
-      this.setState({ contacts: initialContacts });
     }
   }
 
